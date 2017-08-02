@@ -3,8 +3,10 @@ package top.fcc143.sharedpreferencestest;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,5 +27,21 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+
+        Button restoreData = (Button) findViewById(R.id.restore_data);
+        restoreData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
+                String name = pref.getString("name", "");
+                int age = pref.getInt("age", 0);
+                boolean married = pref.getBoolean("married", false);
+                Toast.makeText(MainActivity.this, "Name is " + name, Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Age is " + age, Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Married is " + married, Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 }
