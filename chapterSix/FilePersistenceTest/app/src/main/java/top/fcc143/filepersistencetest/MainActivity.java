@@ -3,11 +3,16 @@ package top.fcc143.filepersistencetest;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
 public class MainActivity extends AppCompatActivity {
@@ -18,6 +23,40 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         edit = (EditText) findViewById(R.id.edit);
+        String inputText = load();
+        //TextUtuils.isEmpty()方法可以同时进行null或者空字符串的判断
+        if(!TextUtils.isEmpty(inputText)){
+            //设置文本内容
+            edit.setText(inputText);
+            //设置光标位置到文本最后
+            edit.setSelection(inputText.length());
+            Toast.makeText(this, "记录已恢复", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public String load(){
+        FileInputStream in = null;
+        BufferedReader reader = null;
+        StringBuilder content = new StringBuilder();
+        try{
+            in = openFileInput("data");
+            reader = new BufferedReader(new InputStreamReader(in));
+            String line = "";
+            while((line = reader.readLine()) != null){
+                content.append(line);
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }finally {
+            if(reader != null){
+                try{
+                    reader.close();
+                }catch(IOException e){
+                    e.printStackTrace();
+                }
+            }
+            return content.toString();
+        }
     }
 
     @Override
